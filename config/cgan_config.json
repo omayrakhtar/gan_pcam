@@ -1,0 +1,5 @@
+{
+        "data_path": "E:\\project\\gan_pcam\\data\\train_sample\\",
+        "model_path": "E:\\project\\gan_pcam\\training_output\\model",
+        "output_path": "E:\\project\\gan_pcam\\training_output\\output"
+}

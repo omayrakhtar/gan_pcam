@@ -1,0 +1,15 @@
+#gitignore file/directories
+
+.vscode/
+
+__pycache__/
+
+data/
+
+*.py[cod]
+
+training_output/*
+
+*.log
+
+.ipynb_checkpoints/*
