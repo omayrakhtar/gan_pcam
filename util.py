@@ -2,7 +2,7 @@
 
 from math import sqrt
 from os.path import join
-from typing import Dict
+from typing import Dict, Optional
 
 import attr
 import numpy as np
@@ -22,6 +22,7 @@ class TrainParam:
     epoch_checkpoint: int
     n_summary_samples: int
     config: Dict[str, str]
+    starting_epoch: Optional[int] = None
 
 def trainer(gan_model: GanModel, data_loader: DataLoader, tarin_param: TrainParam):
     n_batches = int(data_loader.X.shape[0] / tarin_param.batch_size)
@@ -29,7 +30,8 @@ def trainer(gan_model: GanModel, data_loader: DataLoader, tarin_param: TrainPara
     epoch_dloss_r = []
     epoch_dloss_f = []
     epoch_gen_loss = []
-    for epoch in range(tarin_param.n_epochs):
+    starting_epoch = 0 if tarin_param.starting_epoch is None else tarin_param.starting_epoch
+    for epoch in range(starting_epoch, tarin_param.n_epochs):
         np.random.shuffle(dataset_indices)
         batch_dloss_r = []
         batch_dloss_f = []
@@ -69,7 +71,7 @@ def trainer(gan_model: GanModel, data_loader: DataLoader, tarin_param: TrainPara
 
         if (epoch+1) % tarin_param.epoch_checkpoint == 0:
             summarizer(
-                epoch=epoch,
+                epoch=epoch+1,
                 gan_model=gan_model,
                 data_loader=data_loader,
                 tarin_param=tarin_param
