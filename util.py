@@ -2,7 +2,7 @@
 
 from math import sqrt
 from os.path import join
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 
 import attr
 import numpy as np
@@ -92,13 +92,26 @@ def summarizer(epoch: int, gan_model: GanModel, data_loader: DataLoader, tarin_p
         n_samples=tarin_param.n_summary_samples
     )
     X = ((X * 127.5) + 127.5).astype('uint8')
-    sample_sqrt = int(sqrt(tarin_param.n_summary_samples))
-    plt.figure(figsize=(15, 15))
-    for i in range(tarin_param.n_summary_samples):
+    plot_images(
+        X=X,
+        figsize=(15, 15),
+        n_samples=tarin_param.n_summary_samples,
+        epoch=epoch,
+        output_path=tarin_param.config['output_path']
+    )
+    gan_model.generator.save(join(tarin_param.config['model_path'], f'g_model_{epoch}.h5'))
+    gan_model.discriminator.save(join(tarin_param.config['model_path'], f'm_model_{epoch}.h5'))
+
+def plot_images(X: int, figsize: Tuple, n_samples: int, epoch: int, output_path: Optional[str] = None):
+    plt.figure(figsize=figsize)
+    sample_sqrt = int(sqrt(n_samples))
+    plt.subplots_adjust(right=0.9, left=0.0, top=0.9, bottom=0.0, hspace=0.02, wspace=0.02)
+    for i in range(n_samples):
         plt.subplot(sample_sqrt, sample_sqrt, 1 + i)
         plt.axis('off')
         plt.imshow(X[i, :, :, :])
-    plt.savefig(join(tarin_param.config['output_path'], f'generated_plot_{epoch}.png'))
-    plt.close()
-    gan_model.generator.save(join(tarin_param.config['model_path'], f'g_model_{epoch}.h5'))
-    gan_model.discriminator.save(join(tarin_param.config['model_path'], f'm_model_{epoch}.h5'))
+    plt.show
+    if output_path is not None:
+        plt.savefig(join(output_path, f'generated_plot_{epoch}.png'))
+        plt.close()
+

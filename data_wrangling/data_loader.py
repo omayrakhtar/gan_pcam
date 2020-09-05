@@ -2,7 +2,7 @@
 
 from os import listdir
 from os.path import isfile, join
-from typing import List, Sequence, Tuple, Union
+from typing import List, Sequence, Tuple, Union, Optional
 
 import numpy as np
 from keras.models import Model
@@ -65,12 +65,16 @@ class DataLoader:
             latent_dim: int,
             n_samples: int,
             n_classes: int = 2,
-            class_label: bool = True
+            class_label: bool = True,
+            label: Optional[int] = None
         ) -> Union[Tuple[np.ndarray, np.ndarray], np.ndarray]:
         """Generates a batch of latent vectors of random points"""
         x_input = np.random.randn(latent_dim * n_samples)
         z_input = x_input.reshape(n_samples, latent_dim)
-        labels = np.random.randint(0, n_classes, n_samples)
+        if label is None:
+            labels = np.random.randint(0, n_classes, n_samples)
+        else:
+            labels = np.ones((n_samples,)) * label
         if not class_label:
             return z_input
         return z_input, labels
@@ -80,10 +84,11 @@ class DataLoader:
             generator: Model,
             latent_dim: int,
             n_samples: int,
-            class_label: bool = True
+            class_label: bool = True,
+            label: Optional[int] = None
         ) -> Union[Tuple[np.ndarray, np.ndarray, np.ndarray], Tuple[np.array, np.array]]:
         """Generates a batch of fake samples from latent vectors using generator model"""
-        z_input, labels = self.generate_latent_points(latent_dim, n_samples)
+        z_input, labels = self.generate_latent_points(latent_dim, n_samples, label=label)
         images = generator.predict([z_input, labels] if class_label else z_input)
         y = np.zeros((n_samples, 1))
         if not class_label: 
