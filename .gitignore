@@ -12,4 +12,4 @@ training_output/*
 
 *.log
 
-.notebooks/ipynb_checkpoints
+.notebooks/.ipynb_checkpoints
