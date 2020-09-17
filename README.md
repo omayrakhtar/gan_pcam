@@ -2,7 +2,8 @@
 This project uses conditional GAN with auxiliary classifier[1] to generate synthetic pathology data.
 The dataset used in this project is called PatchCamelyon or PCAM[2]. PCam dataset, derived from
 CAMELYON16[3], contains over two hundred thousand 96x96 breast histopathology slide image patches.
-The patches contain both clinically significant metastatic cancer and healthy cells.
+The patches contain both clinically significant metastatic cancer and healthy cells. More information
+about the project can be found in this [article](https://www.linkedin.com/pulse/standing-shoulders-giants-umair-khan/)
  
 [1] Odena, A., Olah, C., & Shlens, J. (2017, July). Conditional image synthesis with auxiliary
 classifier gans. In International conference on machine learning (pp. 2642-2651).
